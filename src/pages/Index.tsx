@@ -122,6 +122,71 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Featured Stories Section */}
+      <section className="py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Featured Stories</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                id: "kala-utsav-2024",
+                title: "Kala Utsav 2024",
+                description: "Join us for the biggest cultural festival of the year featuring artists from across India.",
+                date: "March 15, 2024",
+                readTime: "5 min read",
+                author: "Kala Connect Team",
+                category: "Events",
+                image: "/lovable-uploads/07a82488-306d-4312-a983-3162f528a949.png"
+              },
+              {
+                id: "emerging-artists-spotlight",
+                title: "Emerging Artists Spotlight",
+                description: "Discover the next generation of creative talent making waves in the art world.",
+                date: "March 10, 2024",
+                readTime: "4 min read",
+                author: "Sarah Mitchell",
+                category: "Artists",
+                image: "/api/placeholder/400/250"
+              },
+              {
+                id: "digital-art-revolution",
+                title: "The Digital Art Revolution",
+                description: "How technology is transforming the way we create and experience art in the modern age.",
+                date: "March 5, 2024",
+                readTime: "6 min read",
+                author: "Tech Arts Team",
+                category: "Technology",
+                image: "/api/placeholder/400/250"
+              }
+            ].map((story, index) => (
+              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group" onClick={() => window.location.href = `/story/${story.id}`}>
+                <div className="aspect-video bg-muted overflow-hidden">
+                  <img 
+                    src={story.image} 
+                    alt={story.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="inline-block px-2 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                      {story.category}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{story.readTime}</span>
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">{story.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{story.description}</p>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{story.author}</span>
+                    <span>{story.date}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* How It Works Section */}
       <section className="py-16 px-4">
         <div className="max-w-4xl mx-auto">
