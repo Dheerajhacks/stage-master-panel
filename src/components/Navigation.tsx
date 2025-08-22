@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Bell } from "lucide-react";
-import { Button } from "./ui/button";
+import { Search, MapPin, Bell, ChevronDown, Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +9,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface NavigationProps {
   onArtistDashboard: () => void;
@@ -32,6 +33,56 @@ export const Navigation = ({ onArtistDashboard }: NavigationProps) => {
             <span className="text-xl font-semibold text-foreground">Kala Connect</span>
           </div>
 
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6">
+            {/* Category Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center space-x-1">
+                  <span>Category</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-48 bg-popover">
+                <DropdownMenuItem>Music</DropdownMenuItem>
+                <DropdownMenuItem>Dance</DropdownMenuItem>
+                <DropdownMenuItem>Visual Arts</DropdownMenuItem>
+                <DropdownMenuItem>Theater</DropdownMenuItem>
+                <DropdownMenuItem>Photography</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Contact Us */}
+            <Button variant="ghost">Contact Us</Button>
+
+            {/* Location Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center space-x-1">
+                  <MapPin className="h-4 w-4" />
+                  <span>Location</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-48 bg-popover">
+                <DropdownMenuItem>New York</DropdownMenuItem>
+                <DropdownMenuItem>Los Angeles</DropdownMenuItem>
+                <DropdownMenuItem>Chicago</DropdownMenuItem>
+                <DropdownMenuItem>Miami</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {/* Search Bar */}
+          <div className="hidden md:flex items-center flex-1 max-w-md mx-6">
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search artists..."
+                className="pl-10 bg-muted/30 border-border"
+              />
+            </div>
+          </div>
 
           {/* Right Side */}
           <div className="flex items-center space-x-4">
@@ -86,9 +137,44 @@ export const Navigation = ({ onArtistDashboard }: NavigationProps) => {
               </div>
             )}
 
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
           </div>
         </div>
 
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 border-t border-border">
+              {/* Mobile Search */}
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search artists..."
+                  className="pl-10 bg-muted/30 border-border"
+                />
+              </div>
+              
+              <Button variant="ghost" className="w-full justify-start">
+                Category
+              </Button>
+              <Button variant="ghost" className="w-full justify-start">
+                Contact Us
+              </Button>
+              <Button variant="ghost" className="w-full justify-start">
+                <MapPin className="h-4 w-4 mr-2" />
+                Location
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
