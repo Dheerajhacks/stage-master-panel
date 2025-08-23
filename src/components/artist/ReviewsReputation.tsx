@@ -1,82 +1,98 @@
+import * as React from "react"
 import { useState } from "react";
 import { Star, MessageSquare, Award, TrendingUp, Reply, ThumbsUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import * as AvatarPrimitive from "@radix-ui/react-avatar"
+import { cn } from "../../lib/utils"
+
+// Inline UI components with direct Tailwind classes
+const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string; size?: string }>(
+  ({ className, variant = "default", size = "default", ...props }, ref) => {
+    const baseStyles = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+    const variants = {
+      default: "bg-blue-600 text-white hover:bg-blue-700",
+      outline: "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900",
+      ghost: "hover:bg-gray-100 hover:text-gray-900"
+    }
+    const sizes = {
+      default: "h-10 px-4 py-2",
+      sm: "h-9 rounded-md px-3"
+    }
+    return (
+      <button
+        className={cn(baseStyles, variants[variant as keyof typeof variants], sizes[size as keyof typeof sizes], className)}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+
+const Card = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm", className)} {...props} />
+)
+
+const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
+)
+
+const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h3 className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
+)
+
+const CardDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+  <p className={cn("text-sm text-gray-500", className)} {...props} />
+)
+
+const CardContent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("p-6 pt-0", className)} {...props} />
+)
+
+const Badge = ({ className, variant = "default", ...props }: React.HTMLAttributes<HTMLDivElement> & { variant?: string }) => {
+  const variants = {
+    default: "border-transparent bg-blue-600 text-white hover:bg-blue-700",
+    secondary: "border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200"
+  }
+  return (
+    <div className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", variants[variant as keyof typeof variants], className)} {...props} />
+  )
+}
+
+const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
+  ({ className, ...props }, ref) => {
+    return (
+      <textarea
+        className={cn(
+          "flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+
+const Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>>(
+  ({ className, ...props }, ref) => (
+    <AvatarPrimitive.Root ref={ref} className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)} {...props} />
+  )
+)
+
+const AvatarImage = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Image>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>>(
+  ({ className, ...props }, ref) => (
+    <AvatarPrimitive.Image ref={ref} className={cn("aspect-square h-full w-full", className)} {...props} />
+  )
+)
+
+const AvatarFallback = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Fallback>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>>(
+  ({ className, ...props }, ref) => (
+    <AvatarPrimitive.Fallback ref={ref} className={cn("flex h-full w-full items-center justify-center rounded-full bg-gray-100", className)} {...props} />
+  )
+)
 
 export const ReviewsReputation = () => {
   const [replyText, setReplyText] = useState("");
   const [selectedReview, setSelectedReview] = useState<any>(null);
-
-  // Mock reviews data
-  const reviews = [
-    {
-      id: 1,
-      client: "Sarah Johnson",
-      rating: 5,
-      event: "Wedding Photography",
-      date: "December 10, 2024",
-      review: "Absolutely amazing work! The photographer captured every moment perfectly. The photos are stunning and we couldn't be happier with the results. Highly recommend!",
-      avatar: "/api/placeholder/40/40",
-      helpful: 12,
-      reply: null
-    },
-    {
-      id: 2,
-      client: "Tech Corp Inc.",
-      rating: 5,
-      event: "Corporate Event",
-      date: "December 8, 2024",
-      review: "Professional, punctual, and delivered exceptional quality photos for our corporate event. Great communication throughout the process.",
-      avatar: "/api/placeholder/40/40",
-      helpful: 8,
-      reply: "Thank you for the wonderful review! It was a pleasure working with your team."
-    },
-    {
-      id: 3,
-      client: "Emma Davis",
-      rating: 4,
-      event: "Portrait Session",
-      date: "December 5, 2024",
-      review: "Great experience! The photographer was very patient and helped me feel comfortable during the shoot. The final photos turned out beautifully.",
-      avatar: "/api/placeholder/40/40",
-      helpful: 5,
-      reply: null
-    },
-    {
-      id: 4,
-      client: "Michael Brown",
-      rating: 5,
-      event: "Birthday Party",
-      date: "December 3, 2024",
-      review: "Fantastic photographer! Captured all the special moments of our celebration. Kids loved working with them too. Will definitely book again!",
-      avatar: "/api/placeholder/40/40",
-      helpful: 15,
-      reply: "Thank you so much! Your family was wonderful to work with. Looking forward to future events!"
-    },
-    {
-      id: 5,
-      client: "Lisa Chen",
-      rating: 4,
-      event: "Engagement Photos",
-      date: "November 28, 2024",
-      review: "Beautiful photos and great locations suggested by the photographer. Only minor feedback would be faster delivery time, but overall very satisfied.",
-      avatar: "/api/placeholder/40/40",
-      helpful: 7,
-      reply: null
-    }
-  ];
-
-  const badges = [
-    { name: "Top Rated", icon: Star, description: "Consistently high ratings", earned: true },
-    { name: "Trending", icon: TrendingUp, description: "Popular this month", earned: true },
-    { name: "Verified", icon: Award, description: "Identity verified", earned: true },
-    { name: "Quick Response", icon: MessageSquare, description: "Responds within 1 hour", earned: false },
-    { name: "100+ Reviews", icon: ThumbsUp, description: "Over 100 positive reviews", earned: false }
-  ];
 
   const stats = {
     averageRating: 4.8,
@@ -85,34 +101,67 @@ export const ReviewsReputation = () => {
     repeatClients: 68
   };
 
+  const recentReviews = [
+    {
+      id: 1,
+      client: "Sarah Johnson",
+      rating: 5,
+      date: "Dec 10, 2024",
+      event: "Wedding Photography",
+      review: "Absolutely amazing work! The photos captured every precious moment of our special day. Professional, creative, and so easy to work with.",
+      replied: false,
+      helpful: 12
+    },
+    {
+      id: 2,
+      client: "Michael Chen",
+      rating: 5,
+      date: "Dec 8, 2024",
+      event: "Corporate Event",
+      review: "Outstanding photography for our company event. Great attention to detail and delivered photos quickly. Highly recommend!",
+      replied: true,
+      reply: "Thank you so much for the kind words! It was a pleasure working with your team.",
+      helpful: 8
+    },
+    {
+      id: 3,
+      client: "Emma Davis",
+      rating: 4,
+      date: "Dec 5, 2024",
+      event: "Portrait Session",
+      review: "Great experience overall. The photographer was professional and the photos turned out beautiful. Would book again!",
+      replied: false,
+      helpful: 5
+    }
+  ];
+
+  const badges = [
+    { name: "Top Rated", icon: Award, description: "Consistently high ratings", earned: true },
+    { name: "Quick Responder", icon: Reply, description: "Responds within 1 hour", earned: true },
+    { name: "Repeat Client Favorite", icon: ThumbsUp, description: "High repeat booking rate", earned: true },
+    { name: "Rising Star", icon: TrendingUp, description: "Growing popularity", earned: false }
+  ];
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`h-4 w-4 ${
-          i < rating 
-            ? "fill-yellow-400 text-yellow-400" 
-            : "text-gray-300"
-        }`}
-      />
+      <Star key={i} className={`h-4 w-4 ${i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} />
     ));
   };
 
   const handleReply = (reviewId: number) => {
     console.log("Replying to review:", reviewId, "with:", replyText);
     setReplyText("");
-    setSelectedReview(null);
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-foreground flex items-center">
+        <h2 className="text-2xl font-bold text-gray-900 flex items-center">
           <Star className="mr-2 h-6 w-6" />
           Reviews & Reputation
         </h2>
-        <p className="text-muted-foreground">Manage your reviews and track your reputation badges</p>
+        <p className="text-gray-500">Manage your reviews and track your reputation badges</p>
       </div>
 
       {/* Stats Overview */}
@@ -137,7 +186,7 @@ export const ReviewsReputation = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalReviews}</div>
-            <p className="text-xs text-muted-foreground">+5 this month</p>
+            <p className="text-xs text-gray-500 mt-1">+12 this month</p>
           </CardContent>
         </Card>
 
@@ -148,7 +197,7 @@ export const ReviewsReputation = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.responseRate}%</div>
-            <p className="text-xs text-muted-foreground">Within 24 hours</p>
+            <p className="text-xs text-gray-500 mt-1">Within 24 hours</p>
           </CardContent>
         </Card>
 
@@ -159,177 +208,139 @@ export const ReviewsReputation = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.repeatClients}%</div>
-            <p className="text-xs text-muted-foreground">Client retention</p>
+            <p className="text-xs text-gray-500 mt-1">Book again</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Reviews List */}
+        {/* Recent Reviews */}
         <div className="lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Reviews</CardTitle>
-              <CardDescription>Your latest client feedback</CardDescription>
+              <CardTitle className="text-lg">Recent Reviews</CardTitle>
+              <CardDescription>Latest feedback from your clients</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {reviews.map((review) => (
-                <div key={review.id} className="border-b border-border last:border-b-0 pb-6 last:pb-0">
-                  <div className="flex items-start space-x-4">
-                    <Avatar className="w-10 h-10">
-                      <AvatarImage src={review.avatar} alt={review.client} />
-                      <AvatarFallback>{review.client.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    </Avatar>
-                    
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium">{review.client}</div>
-                          <div className="text-sm text-muted-foreground">{review.event} • {review.date}</div>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          {renderStars(review.rating)}
-                        </div>
+              {recentReviews.map((review) => (
+                <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={`/api/placeholder/40/40`} alt={review.client} />
+                        <AvatarFallback>{review.client.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <div className="font-medium">{review.client}</div>
+                        <div className="text-sm text-gray-500">{review.event} • {review.date}</div>
                       </div>
-                      
-                      <p className="text-sm text-muted-foreground">{review.review}</p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4 text-xs text-muted-foreground">
-                          <span className="flex items-center space-x-1">
-                            <ThumbsUp className="h-3 w-3" />
-                            <span>{review.helpful} helpful</span>
-                          </span>
-                        </div>
-                        
-                        {!review.reply ? (
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => setSelectedReview(review)}
-                          >
-                            <Reply className="h-3 w-3 mr-1" />
-                            Reply
-                          </Button>
-                        ) : (
-                          <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200">
-                            Replied
-                          </Badge>
-                        )}
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1">
+                        {renderStars(review.rating)}
                       </div>
-                      
-                      {review.reply && (
-                        <div className="mt-3 p-3 bg-muted rounded-lg">
-                          <div className="text-sm font-medium mb-1">Your reply:</div>
-                          <p className="text-sm text-muted-foreground">{review.reply}</p>
-                        </div>
-                      )}
+                      <span className="text-sm text-gray-500">{review.helpful} helpful</span>
                     </div>
                   </div>
+
+                  <p className="text-gray-700 mb-3">{review.review}</p>
+
+                  {review.replied ? (
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <Reply className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium text-blue-600">Your Reply</span>
+                      </div>
+                      <p className="text-sm text-gray-700">{review.reply}</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <Textarea
+                        placeholder="Write a thoughtful reply to this review..."
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        className="min-h-[80px]"
+                      />
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" size="sm">
+                          Save Draft
+                        </Button>
+                        <Button size="sm" onClick={() => handleReply(review.id)}>
+                          <Reply className="h-4 w-4 mr-2" />
+                          Reply
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
-              
-              <div className="text-center pt-4">
-                <Button variant="outline">Load More Reviews</Button>
-              </div>
+
+              <Button variant="outline" className="w-full">
+                View All Reviews
+              </Button>
             </CardContent>
           </Card>
         </div>
 
-        {/* Badges & Achievements */}
+        {/* Reputation Badges */}
         <div>
           <Card>
             <CardHeader>
-              <CardTitle>Achievement Badges</CardTitle>
-              <CardDescription>Track your progress and reputation</CardDescription>
+              <CardTitle className="text-lg">Reputation Badges</CardTitle>
+              <CardDescription>Your earned achievements</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {badges.map((badge, index) => (
-                <div 
-                  key={index} 
-                  className={`flex items-center space-x-3 p-3 rounded-lg border ${
-                    badge.earned 
-                      ? "border-primary bg-primary/5" 
-                      : "border-border bg-muted/30"
-                  }`}
-                >
-                  <badge.icon className={`h-5 w-5 ${
-                    badge.earned ? "text-primary" : "text-muted-foreground"
-                  }`} />
-                  <div className="flex-1">
-                    <div className={`font-medium text-sm ${
-                      badge.earned ? "text-foreground" : "text-muted-foreground"
-                    }`}>
-                      {badge.name}
+                <div key={index} className={`p-3 rounded-lg border ${badge.earned ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-full ${badge.earned ? 'bg-green-100' : 'bg-gray-100'}`}>
+                      <badge.icon className={`h-4 w-4 ${badge.earned ? 'text-green-600' : 'text-gray-400'}`} />
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {badge.description}
+                    <div className="flex-1">
+                      <div className={`font-medium ${badge.earned ? 'text-green-900' : 'text-gray-500'}`}>
+                        {badge.name}
+                      </div>
+                      <div className="text-sm text-gray-500">{badge.description}</div>
                     </div>
+                    {badge.earned && (
+                      <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+                        Earned
+                      </Badge>
+                    )}
                   </div>
-                  {badge.earned && (
-                    <Badge variant="default" className="bg-primary text-primary-foreground">
-                      Earned
-                    </Badge>
-                  )}
                 </div>
               ))}
+            </CardContent>
+          </Card>
+
+          {/* Rating Distribution */}
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="text-lg">Rating Distribution</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {[5, 4, 3, 2, 1].map((rating) => {
+                const percentage = rating === 5 ? 75 : rating === 4 ? 20 : rating === 3 ? 3 : rating === 2 ? 1 : 1;
+                return (
+                  <div key={rating} className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-1 w-12">
+                      <span className="text-sm">{rating}</span>
+                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                    </div>
+                    <div className="flex-1 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-yellow-400 h-2 rounded-full" 
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="text-sm text-gray-500 w-10">{percentage}%</span>
+                  </div>
+                );
+              })}
             </CardContent>
           </Card>
         </div>
       </div>
-
-      {/* Reply Modal */}
-      {selectedReview && (
-        <Dialog open={!!selectedReview} onOpenChange={() => setSelectedReview(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Reply to Review</DialogTitle>
-              <DialogDescription>
-                Respond to {selectedReview.client}'s review
-              </DialogDescription>
-            </DialogHeader>
-            
-            <div className="space-y-4">
-              <div className="p-4 bg-muted rounded-lg">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="font-medium">{selectedReview.client}</span>
-                  <div className="flex items-center space-x-1">
-                    {renderStars(selectedReview.rating)}
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">{selectedReview.review}</p>
-              </div>
-              
-              <div>
-                <label className="text-sm font-medium">Your Reply</label>
-                <Textarea
-                  placeholder="Thank you for your review..."
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  className="mt-1"
-                />
-              </div>
-              
-              <div className="flex space-x-2">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setSelectedReview(null)}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={() => handleReply(selectedReview.id)}
-                  className="flex-1"
-                  disabled={!replyText.trim()}
-                >
-                  Send Reply
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
     </div>
   );
 };
