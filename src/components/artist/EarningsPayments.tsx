@@ -1,121 +1,6 @@
-import * as React from "react"
 import { useState } from "react";
-import { DollarSign, Download, TrendingUp, Calendar, CreditCard, FileText } from "lucide-react";
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import { DollarSign, Download, TrendingUp, Calendar, CreditCard, FileText, ChevronDown, Check } from "lucide-react";
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { ChevronDown, Check } from "lucide-react"
-import { cn } from "../../lib/utils"
-
-// Inline UI components with direct Tailwind classes
-const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string; size?: string }>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-    const variants = {
-      default: "bg-blue-600 text-white hover:bg-blue-700",
-      outline: "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900"
-    }
-    const sizes = {
-      default: "h-10 px-4 py-2",
-      sm: "h-9 rounded-md px-3"
-    }
-    return (
-      <button
-        className={cn(baseStyles, variants[variant as keyof typeof variants], sizes[size as keyof typeof sizes], className)}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-
-const Card = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm", className)} {...props} />
-)
-
-const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-)
-
-const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
-)
-
-const CardDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-sm text-gray-500", className)} {...props} />
-)
-
-const CardContent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("p-6 pt-0", className)} {...props} />
-)
-
-const Badge = ({ className, variant = "default", ...props }: React.HTMLAttributes<HTMLDivElement> & { variant?: string }) => {
-  const variants = {
-    default: "border-transparent bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200"
-  }
-  return (
-    <div className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", variants[variant as keyof typeof variants], className)} {...props} />
-  )
-}
-
-const Select = SelectPrimitive.Root
-const SelectTrigger = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Trigger>, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>>(
-  ({ className, children, ...props }, ref) => (
-    <SelectPrimitive.Trigger
-      ref={ref}
-      className={cn("flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm", className)}
-      {...props}
-    >
-      {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 opacity-50" />
-      </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
-  )
-)
-
-const SelectContent = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Content>, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>>(
-  ({ className, children, position = "popper", ...props }, ref) => (
-    <SelectPrimitive.Portal>
-      <SelectPrimitive.Content
-        ref={ref}
-        className={cn("relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white text-gray-950 shadow-md", className)}
-        position={position}
-        {...props}
-      >
-        <SelectPrimitive.Viewport className="p-1">
-          {children}
-        </SelectPrimitive.Viewport>
-      </SelectPrimitive.Content>
-    </SelectPrimitive.Portal>
-  )
-)
-
-const SelectItem = React.forwardRef<React.ElementRef<typeof SelectPrimitive.Item>, React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>>(
-  ({ className, children, ...props }, ref) => (
-    <SelectPrimitive.Item
-      ref={ref}
-      className={cn("relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-gray-100", className)}
-      {...props}
-    >
-      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-        <SelectPrimitive.ItemIndicator>
-          <Check className="h-4 w-4" />
-        </SelectPrimitive.ItemIndicator>
-      </span>
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-    </SelectPrimitive.Item>
-  )
-)
-
-const SelectValue = SelectPrimitive.Value
-
-const Progress = ({ value = 0, className, ...props }: React.HTMLAttributes<HTMLDivElement> & { value?: number }) => (
-  <div className={cn("relative h-4 w-full overflow-hidden rounded-full bg-gray-200", className)} {...props}>
-    <div className="h-full w-full flex-1 bg-blue-600 transition-all" style={{ transform: `translateX(-${100 - value}%)` }} />
-  </div>
-)
 
 export const EarningsPayments = () => {
   const [timeframe, setTimeframe] = useState("monthly");
@@ -182,26 +67,26 @@ export const EarningsPayments = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Completed</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-green-100 text-green-800 border-green-200">Completed</div>;
       case "pending":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">Pending</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-yellow-100 text-yellow-800 border-yellow-200">Pending</div>;
       case "failed":
-        return <Badge className="bg-red-100 text-red-800 border-red-200">Failed</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-red-100 text-red-800 border-red-200">Failed</div>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200">{status}</div>;
     }
   };
 
   const getTypeBadge = (type: string) => {
     switch (type) {
       case "deposit":
-        return <Badge variant="secondary">Deposit</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200">Deposit</div>;
       case "final":
-        return <Badge>Final Payment</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-blue-600 text-white hover:bg-blue-700">Final Payment</div>;
       case "refund":
-        return <Badge className="bg-orange-100 text-orange-800 border-orange-200">Refund</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-orange-100 text-orange-800 border-orange-200">Refund</div>;
       default:
-        return <Badge variant="secondary">{type}</Badge>;
+        return <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200">{type}</div>;
     }
   };
 
@@ -221,32 +106,53 @@ export const EarningsPayments = () => {
           <p className="text-gray-500">Track your earnings, payments, and download invoices</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Select value={timeframe} onValueChange={setTimeframe}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="yearly">Yearly</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="outline">
+          <SelectPrimitive.Root value={timeframe} onValueChange={setTimeframe}>
+            <SelectPrimitive.Trigger className="flex h-10 w-full items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2 text-sm w-[140px]">
+              <SelectPrimitive.Value />
+              <SelectPrimitive.Icon asChild>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </SelectPrimitive.Icon>
+            </SelectPrimitive.Trigger>
+            <SelectPrimitive.Portal>
+              <SelectPrimitive.Content className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white text-gray-950 shadow-md" position="popper">
+                <SelectPrimitive.Viewport className="p-1">
+                  <SelectPrimitive.Item value="monthly" className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-gray-100">
+                    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                      <SelectPrimitive.ItemIndicator>
+                        <Check className="h-4 w-4" />
+                      </SelectPrimitive.ItemIndicator>
+                    </span>
+                    <SelectPrimitive.ItemText>Monthly</SelectPrimitive.ItemText>
+                  </SelectPrimitive.Item>
+                  <SelectPrimitive.Item value="yearly" className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-gray-100">
+                    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                      <SelectPrimitive.ItemIndicator>
+                        <Check className="h-4 w-4" />
+                      </SelectPrimitive.ItemIndicator>
+                    </span>
+                    <SelectPrimitive.ItemText>Yearly</SelectPrimitive.ItemText>
+                  </SelectPrimitive.Item>
+                </SelectPrimitive.Viewport>
+              </SelectPrimitive.Content>
+            </SelectPrimitive.Portal>
+          </SelectPrimitive.Root>
+          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 px-4 py-2">
             <Download className="h-4 w-4 mr-2" />
             Export
-          </Button>
+          </button>
         </div>
       </div>
 
       {/* Earnings Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-lg">Earnings Overview</CardTitle>
-            <CardDescription>
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm md:col-span-2">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Earnings Overview</h3>
+            <p className="text-sm text-gray-500">
               Your {timeframe} earnings performance
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+            </p>
+          </div>
+          <div className="p-6 pt-0">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -284,16 +190,16 @@ export const EarningsPayments = () => {
                 </div>
               )}
             </div>
-            </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Payment Methods */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Payment Methods</CardTitle>
-            <CardDescription>Manage your payout preferences</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Payment Methods</h3>
+            <p className="text-sm text-gray-500">Manage your payout preferences</p>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
             {paymentMethods.map((method, index) => (
               <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
                 <div className="flex items-center space-x-3">
@@ -304,32 +210,32 @@ export const EarningsPayments = () => {
                   </div>
                 </div>
                 {method.isDefault && (
-                  <Badge variant="secondary" className="text-xs">Default</Badge>
+                  <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200 text-xs">Default</div>
                 )}
               </div>
             ))}
-            <Button variant="outline" className="w-full">
+            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 px-4 py-2 w-full">
               Add Payment Method
-            </Button>
-          </CardContent>
-        </Card>
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Recent Transactions */}
-      <Card>
-        <CardHeader>
+      <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-lg">Recent Transactions</CardTitle>
-              <CardDescription>Your latest payments and invoices</CardDescription>
+              <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Recent Transactions</h3>
+              <p className="text-sm text-gray-500">Your latest payments and invoices</p>
             </div>
-            <Button variant="outline">
+            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 px-4 py-2">
               <FileText className="h-4 w-4 mr-2" />
               View All
-            </Button>
+            </button>
           </div>
-        </CardHeader>
-        <CardContent>
+        </div>
+        <div className="p-6 pt-0">
           <div className="space-y-4">
             {recentTransactions.map((transaction) => (
               <div key={transaction.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
@@ -351,30 +257,32 @@ export const EarningsPayments = () => {
                       {getStatusBadge(transaction.status)}
                     </div>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-9 rounded-md px-3">
                     <Download className="h-3 w-3 mr-1" />
                     Invoice
-                  </Button>
+                  </button>
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Earnings Goals */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Monthly Goals</CardTitle>
-          <CardDescription>Track your progress towards monthly targets</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Monthly Goals</h3>
+          <p className="text-sm text-gray-500">Track your progress towards monthly targets</p>
+        </div>
+        <div className="p-6 pt-0 space-y-6">
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Earnings Goal</span>
               <span className="text-sm text-gray-500">$3,240 / $4,000</span>
             </div>
-            <Progress value={81} className="h-2" />
+            <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+              <div className="h-full w-full flex-1 bg-blue-600 transition-all" style={{ transform: `translateX(-${100 - 81}%)` }} />
+            </div>
             <div className="text-xs text-gray-500 mt-1">81% of monthly goal achieved</div>
           </div>
           
@@ -383,11 +291,13 @@ export const EarningsPayments = () => {
               <span className="text-sm font-medium">Bookings Goal</span>
               <span className="text-sm text-gray-500">8 / 10</span>
             </div>
-            <Progress value={80} className="h-2" />
+            <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+              <div className="h-full w-full flex-1 bg-blue-600 transition-all" style={{ transform: `translateX(-${100 - 80}%)` }} />
+            </div>
             <div className="text-xs text-gray-500 mt-1">80% of booking goal achieved</div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,94 +1,6 @@
-import * as React from "react"
 import { useState } from "react";
 import { Star, MessageSquare, Award, TrendingUp, Reply, ThumbsUp } from "lucide-react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
-import { cn } from "../../lib/utils"
-
-// Inline UI components with direct Tailwind classes
-const Button = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: string; size?: string }>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
-    const baseStyles = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-    const variants = {
-      default: "bg-blue-600 text-white hover:bg-blue-700",
-      outline: "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900",
-      ghost: "hover:bg-gray-100 hover:text-gray-900"
-    }
-    const sizes = {
-      default: "h-10 px-4 py-2",
-      sm: "h-9 rounded-md px-3"
-    }
-    return (
-      <button
-        className={cn(baseStyles, variants[variant as keyof typeof variants], sizes[size as keyof typeof sizes], className)}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-
-const Card = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm", className)} {...props} />
-)
-
-const CardHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-)
-
-const CardTitle = ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <h3 className={cn("text-2xl font-semibold leading-none tracking-tight", className)} {...props} />
-)
-
-const CardDescription = ({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <p className={cn("text-sm text-gray-500", className)} {...props} />
-)
-
-const CardContent = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("p-6 pt-0", className)} {...props} />
-)
-
-const Badge = ({ className, variant = "default", ...props }: React.HTMLAttributes<HTMLDivElement> & { variant?: string }) => {
-  const variants = {
-    default: "border-transparent bg-blue-600 text-white hover:bg-blue-700",
-    secondary: "border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200"
-  }
-  return (
-    <div className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold", variants[variant as keyof typeof variants], className)} {...props} />
-  )
-}
-
-const Textarea = React.forwardRef<HTMLTextAreaElement, React.TextareaHTMLAttributes<HTMLTextAreaElement>>(
-  ({ className, ...props }, ref) => {
-    return (
-      <textarea
-        className={cn(
-          "flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          className
-        )}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-
-const Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>>(
-  ({ className, ...props }, ref) => (
-    <AvatarPrimitive.Root ref={ref} className={cn("relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full", className)} {...props} />
-  )
-)
-
-const AvatarImage = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Image>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>>(
-  ({ className, ...props }, ref) => (
-    <AvatarPrimitive.Image ref={ref} className={cn("aspect-square h-full w-full", className)} {...props} />
-  )
-)
-
-const AvatarFallback = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Fallback>, React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback>>(
-  ({ className, ...props }, ref) => (
-    <AvatarPrimitive.Fallback ref={ref} className={cn("flex h-full w-full items-center justify-center rounded-full bg-gray-100", className)} {...props} />
-  )
-)
 
 export const ReviewsReputation = () => {
   const [replyText, setReplyText] = useState("");
@@ -166,70 +78,70 @@ export const ReviewsReputation = () => {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-sm font-medium">Average Rating</h3>
             <Star className="h-4 w-4 text-yellow-400" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="p-6 pt-0">
             <div className="text-2xl font-bold">{stats.averageRating}</div>
             <div className="flex items-center space-x-1 mt-1">
               {renderStars(Math.floor(stats.averageRating))}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Reviews</CardTitle>
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-sm font-medium">Total Reviews</h3>
             <MessageSquare className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="p-6 pt-0">
             <div className="text-2xl font-bold">{stats.totalReviews}</div>
             <p className="text-xs text-gray-500 mt-1">+12 this month</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Response Rate</CardTitle>
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-sm font-medium">Response Rate</h3>
             <Reply className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="p-6 pt-0">
             <div className="text-2xl font-bold">{stats.responseRate}%</div>
             <p className="text-xs text-gray-500 mt-1">Within 24 hours</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Repeat Clients</CardTitle>
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-sm font-medium">Repeat Clients</h3>
             <ThumbsUp className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
+          </div>
+          <div className="p-6 pt-0">
             <div className="text-2xl font-bold">{stats.repeatClients}%</div>
             <p className="text-xs text-gray-500 mt-1">Book again</p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Reviews */}
         <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Recent Reviews</CardTitle>
-              <CardDescription>Latest feedback from your clients</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+          <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Recent Reviews</h3>
+              <p className="text-sm text-gray-500">Latest feedback from your clients</p>
+            </div>
+            <div className="p-6 pt-0 space-y-6">
               {recentReviews.map((review) => (
                 <div key={review.id} className="border-b border-gray-200 pb-6 last:border-b-0">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center space-x-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src={`/api/placeholder/40/40`} alt={review.client} />
-                        <AvatarFallback>{review.client.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
+                      <AvatarPrimitive.Root className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                        <AvatarPrimitive.Image className="aspect-square h-full w-full" src={`/api/placeholder/40/40`} alt={review.client} />
+                        <AvatarPrimitive.Fallback className="flex h-full w-full items-center justify-center rounded-full bg-gray-100">{review.client.split(' ').map(n => n[0]).join('')}</AvatarPrimitive.Fallback>
+                      </AvatarPrimitive.Root>
                       <div>
                         <div className="font-medium">{review.client}</div>
                         <div className="text-sm text-gray-500">{review.event} • {review.date}</div>
@@ -255,41 +167,41 @@ export const ReviewsReputation = () => {
                     </div>
                   ) : (
                     <div className="space-y-3">
-                      <Textarea
+                      <textarea
+                        className="flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[80px]"
                         placeholder="Write a thoughtful reply to this review..."
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
-                        className="min-h-[80px]"
                       />
                       <div className="flex justify-end space-x-2">
-                        <Button variant="outline" size="sm">
+                        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-9 rounded-md px-3">
                           Save Draft
-                        </Button>
-                        <Button size="sm" onClick={() => handleReply(review.id)}>
+                        </button>
+                        <button onClick={() => handleReply(review.id)} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-9 rounded-md px-3">
                           <Reply className="h-4 w-4 mr-2" />
                           Reply
-                        </Button>
+                        </button>
                       </div>
                     </div>
                   )}
                 </div>
               ))}
 
-              <Button variant="outline" className="w-full">
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 px-4 py-2 w-full">
                 View All Reviews
-              </Button>
-            </CardContent>
-          </Card>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Reputation Badges */}
         <div>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Reputation Badges</CardTitle>
-              <CardDescription>Your earned achievements</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Reputation Badges</h3>
+              <p className="text-sm text-gray-500">Your earned achievements</p>
+            </div>
+            <div className="p-6 pt-0 space-y-4">
               {badges.map((badge, index) => (
                 <div key={index} className={`p-3 rounded-lg border ${badge.earned ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center space-x-3">
@@ -303,22 +215,22 @@ export const ReviewsReputation = () => {
                       <div className="text-sm text-gray-500">{badge.description}</div>
                     </div>
                     {badge.earned && (
-                      <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+                      <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-green-100 text-green-800 border-green-200">
                         Earned
-                      </Badge>
+                      </div>
                     )}
                   </div>
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Rating Distribution */}
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle className="text-lg">Rating Distribution</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+          <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm mt-6">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Rating Distribution</h3>
+            </div>
+            <div className="p-6 pt-0 space-y-3">
               {[5, 4, 3, 2, 1].map((rating) => {
                 const percentage = rating === 5 ? 75 : rating === 4 ? 20 : rating === 3 ? 3 : rating === 2 ? 1 : 1;
                 return (
@@ -337,8 +249,8 @@ export const ReviewsReputation = () => {
                   </div>
                 );
               })}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </div>

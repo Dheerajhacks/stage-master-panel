@@ -1,128 +1,5 @@
-import * as React from "react"
 import { useState } from "react";
 import { Calendar, Clock, Plus, ChevronLeft, ChevronRight } from "lucide-react";
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "../../lib/utils"
-
-// Button Component (inline)
-const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      variant: {
-        default: "bg-blue-600 text-white hover:bg-blue-700",
-        destructive: "bg-red-600 text-white hover:bg-red-700",
-        outline: "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
-        ghost: "hover:bg-gray-100 hover:text-gray-900",
-        link: "text-blue-600 underline-offset-4 hover:underline",
-      },
-      size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
-        icon: "h-10 w-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-      size: "default",
-    },
-  }
-)
-
-interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-}
-
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-Button.displayName = "Button"
-
-// Card Components (inline)
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm", className)}
-      {...props}
-    />
-  )
-)
-Card.displayName = "Card"
-
-const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex flex-col space-y-1.5 p-6", className)} {...props} />
-  )
-)
-CardHeader.displayName = "CardHeader"
-
-const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h3
-      ref={ref}
-      className={cn("text-2xl font-semibold leading-none tracking-tight", className)}
-      {...props}
-    />
-  )
-)
-CardTitle.displayName = "CardTitle"
-
-const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-sm text-gray-500", className)} {...props} />
-  )
-)
-CardDescription.displayName = "CardDescription"
-
-const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-  )
-)
-CardContent.displayName = "CardContent"
-
-// Badge Component (inline)
-const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
-  {
-    variants: {
-      variant: {
-        default: "border-transparent bg-blue-600 text-white hover:bg-blue-700",
-        secondary: "border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200",
-        destructive: "border-transparent bg-red-600 text-white hover:bg-red-700",
-        outline: "text-gray-950",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
-
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
-
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  )
-}
 
 export const CalendarView = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -170,45 +47,51 @@ export const CalendarView = () => {
           <p className="text-gray-500">Manage your availability and view upcoming bookings</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button
-            variant={viewMode === "week" ? "default" : "outline"}
+          <button
+            className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md px-3 ${
+              viewMode === "week" 
+                ? "bg-blue-600 text-white hover:bg-blue-700" 
+                : "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900"
+            }`}
             onClick={() => setViewMode("week")}
-            size="sm"
           >
             Week
-          </Button>
-          <Button
-            variant={viewMode === "month" ? "default" : "outline"}
+          </button>
+          <button
+            className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md px-3 ${
+              viewMode === "month" 
+                ? "bg-blue-600 text-white hover:bg-blue-700" 
+                : "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900"
+            }`}
             onClick={() => setViewMode("month")}
-            size="sm"
           >
             Month
-          </Button>
-          <Button className="ml-4">
+          </button>
+          <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-blue-600 text-white hover:bg-blue-700 h-10 px-4 py-2 ml-4">
             <Plus className="h-4 w-4 mr-2" />
             Add Availability
-          </Button>
+          </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Calendar Navigation */}
         <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
+          <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">{formatMonth(currentDate)}</CardTitle>
+                <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">{formatMonth(currentDate)}</h3>
                 <div className="flex items-center space-x-2">
-                  <Button variant="outline" size="icon" onClick={() => navigateMonth('prev')}>
+                  <button onClick={() => navigateMonth('prev')} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 w-10">
                     <ChevronLeft className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon" onClick={() => navigateMonth('next')}>
+                  </button>
+                  <button onClick={() => navigateMonth('next')} className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 w-10">
                     <ChevronRight className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               </div>
-            </CardHeader>
-            <CardContent>
+            </div>
+            <div className="p-6 pt-0">
               {/* Weekly View */}
               {viewMode === "week" && (
                 <div className="space-y-4">
@@ -223,20 +106,20 @@ export const CalendarView = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         {slot.available ? (
-                          <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+                          <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-green-100 text-green-800 border-green-200">
                             Available
-                          </Badge>
+                          </div>
                         ) : (
                           <>
-                            <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-red-100 text-red-800 border-red-200">
                               Booked
-                            </Badge>
+                            </div>
                             {slot.booking && (
                               <span className="text-sm text-gray-500">{slot.booking}</span>
                             )}
                           </>
                         )}
-                        <Button variant="ghost" size="sm">Edit</Button>
+                        <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-gray-100 hover:text-gray-900 h-9 rounded-md px-3">Edit</button>
                       </div>
                     </div>
                   ))}
@@ -260,25 +143,29 @@ export const CalendarView = () => {
                   ))}
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
         {/* Upcoming Bookings Sidebar */}
         <div>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Upcoming Bookings</CardTitle>
-              <CardDescription>Your confirmed and pending events</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Upcoming Bookings</h3>
+              <p className="text-sm text-gray-500">Your confirmed and pending events</p>
+            </div>
+            <div className="p-6 pt-0 space-y-4">
               {upcomingBookings.map((booking, index) => (
                 <div key={index} className="p-3 border border-gray-200 rounded-lg space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="font-medium text-sm">{booking.event}</div>
-                    <Badge variant={booking.status === "confirmed" ? "default" : "secondary"}>
+                    <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
+                      booking.status === "confirmed" 
+                        ? "border-transparent bg-blue-600 text-white hover:bg-blue-700" 
+                        : "border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200"
+                    }`}>
                       {booking.status}
-                    </Badge>
+                    </div>
                   </div>
                   <div className="text-sm text-gray-500">
                     <div>{booking.client}</div>
@@ -289,11 +176,11 @@ export const CalendarView = () => {
                   </div>
                 </div>
               ))}
-              <Button variant="outline" className="w-full">
+              <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 px-4 py-2 w-full">
                 View All Bookings
-              </Button>
-            </CardContent>
-          </Card>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
