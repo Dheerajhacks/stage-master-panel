@@ -283,8 +283,8 @@ export const EarningsPayments = () => {
                   ))}
                 </div>
               )}
+            </div>
             </CardContent>
-          </CardHeader>
         </Card>
 
         {/* Payment Methods */}
