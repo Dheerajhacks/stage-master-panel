@@ -7,8 +7,6 @@ export const EarningsPayments = () => {
 
   // Mock data for earnings
   const totalEarnings = {
-    thisWeek: 850,
-    lastWeek: 720,
     thisMonth: 3240,
     lastMonth: 2890,
     thisYear: 28650,
@@ -92,8 +90,8 @@ export const EarningsPayments = () => {
     }
   };
 
-  const currentEarnings = timeframe === "weekly" ? totalEarnings.thisWeek : timeframe === "monthly" ? totalEarnings.thisMonth : totalEarnings.thisYear;
-  const previousEarnings = timeframe === "weekly" ? totalEarnings.lastWeek : timeframe === "monthly" ? totalEarnings.lastMonth : totalEarnings.lastYear;
+  const currentEarnings = timeframe === "monthly" ? totalEarnings.thisMonth : totalEarnings.thisYear;
+  const previousEarnings = timeframe === "monthly" ? totalEarnings.lastMonth : totalEarnings.lastYear;
   const growthPercentage = ((currentEarnings - previousEarnings) / previousEarnings * 100).toFixed(1);
 
   return (
@@ -118,14 +116,6 @@ export const EarningsPayments = () => {
             <SelectPrimitive.Portal>
               <SelectPrimitive.Content className="relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-white text-gray-950 shadow-md" position="popper">
                 <SelectPrimitive.Viewport className="p-1">
-                  <SelectPrimitive.Item value="weekly" className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-gray-100">
-                    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-                      <SelectPrimitive.ItemIndicator>
-                        <Check className="h-4 w-4" />
-                      </SelectPrimitive.ItemIndicator>
-                    </span>
-                    <SelectPrimitive.ItemText>Weekly</SelectPrimitive.ItemText>
-                  </SelectPrimitive.Item>
                   <SelectPrimitive.Item value="monthly" className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-gray-100">
                     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
                       <SelectPrimitive.ItemIndicator>
@@ -154,50 +144,79 @@ export const EarningsPayments = () => {
       </div>
 
       {/* Earnings Overview */}
-      <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
-        <div className="flex flex-col space-y-1.5 p-6">
-          <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Earnings Overview</h3>
-          <p className="text-sm text-gray-500">
-            Your {timeframe} earnings performance
-          </p>
-        </div>
-        <div className="p-6 pt-0">
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-3xl font-bold">${currentEarnings.toLocaleString()}</div>
-                <div className="text-sm text-gray-500">
-                  {timeframe === "weekly" ? "This Week" : timeframe === "monthly" ? "This Month" : "This Year"}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm md:col-span-2">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Earnings Overview</h3>
+            <p className="text-sm text-gray-500">
+              Your {timeframe} earnings performance
+            </p>
+          </div>
+          <div className="p-6 pt-0">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-3xl font-bold">${currentEarnings.toLocaleString()}</div>
+                  <div className="text-sm text-gray-500">
+                    {timeframe === "monthly" ? "This Month" : "This Year"}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <TrendingUp className={`h-4 w-4 ${parseFloat(growthPercentage) >= 0 ? "text-green-500" : "text-red-500"}`} />
+                  <span className={`text-sm font-medium ${parseFloat(growthPercentage) >= 0 ? "text-green-500" : "text-red-500"}`}>
+                    {parseFloat(growthPercentage) >= 0 ? "+" : ""}{growthPercentage}%
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    vs {timeframe === "monthly" ? "last month" : "last year"}
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <TrendingUp className={`h-4 w-4 ${parseFloat(growthPercentage) >= 0 ? "text-green-500" : "text-red-500"}`} />
-                <span className={`text-sm font-medium ${parseFloat(growthPercentage) >= 0 ? "text-green-500" : "text-red-500"}`}>
-                  {parseFloat(growthPercentage) >= 0 ? "+" : ""}{growthPercentage}%
-                </span>
-                <span className="text-sm text-gray-500">
-                  vs {timeframe === "weekly" ? "last week" : timeframe === "monthly" ? "last month" : "last year"}
-                </span>
-              </div>
-            </div>
 
-            {timeframe === "monthly" && (
-              <div className="space-y-4">
-                <h4 className="font-medium">Monthly Breakdown</h4>
-                {monthlyBreakdown.map((month, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div>
-                      <div className="font-medium">{month.month}</div>
-                      <div className="text-sm text-gray-500">{month.bookings} bookings</div>
+              {timeframe === "monthly" && (
+                <div className="space-y-4">
+                  <h4 className="font-medium">Monthly Breakdown</h4>
+                  {monthlyBreakdown.map((month, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div>
+                        <div className="font-medium">{month.month}</div>
+                        <div className="text-sm text-gray-500">{month.bookings} bookings</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-medium">${month.earnings.toLocaleString()}</div>
+                        <div className="text-sm text-gray-500">${month.avgPerBooking} avg</div>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-medium">${month.earnings.toLocaleString()}</div>
-                      <div className="text-sm text-gray-500">${month.avgPerBooking} avg</div>
-                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Payment Methods */}
+        <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+          <div className="flex flex-col space-y-1.5 p-6">
+            <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Payment Methods</h3>
+            <p className="text-sm text-gray-500">Manage your payout preferences</p>
+          </div>
+          <div className="p-6 pt-0 space-y-4">
+            {paymentMethods.map((method, index) => (
+              <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <CreditCard className="h-4 w-4 text-gray-400" />
+                  <div>
+                    <div className="font-medium text-sm">{method.type}</div>
+                    <div className="text-xs text-gray-500">{method.account}</div>
                   </div>
-                ))}
+                </div>
+                {method.isDefault && (
+                  <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200 text-xs">Default</div>
+                )}
               </div>
-            )}
+            ))}
+            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900 h-10 px-4 py-2 w-full">
+              Add Payment Method
+            </button>
           </div>
         </div>
       </div>
@@ -249,6 +268,36 @@ export const EarningsPayments = () => {
         </div>
       </div>
 
+      {/* Earnings Goals */}
+      <div className="rounded-lg border border-gray-200 bg-white text-gray-950 shadow-sm">
+        <div className="flex flex-col space-y-1.5 p-6">
+          <h3 className="text-2xl font-semibold leading-none tracking-tight text-lg">Monthly Goals</h3>
+          <p className="text-sm text-gray-500">Track your progress towards monthly targets</p>
+        </div>
+        <div className="p-6 pt-0 space-y-6">
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Earnings Goal</span>
+              <span className="text-sm text-gray-500">$3,240 / $4,000</span>
+            </div>
+            <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+              <div className="h-full w-full flex-1 bg-blue-600 transition-all" style={{ transform: `translateX(-${100 - 81}%)` }} />
+            </div>
+            <div className="text-xs text-gray-500 mt-1">81% of monthly goal achieved</div>
+          </div>
+          
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Bookings Goal</span>
+              <span className="text-sm text-gray-500">8 / 10</span>
+            </div>
+            <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+              <div className="h-full w-full flex-1 bg-blue-600 transition-all" style={{ transform: `translateX(-${100 - 80}%)` }} />
+            </div>
+            <div className="text-xs text-gray-500 mt-1">80% of booking goal achieved</div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
