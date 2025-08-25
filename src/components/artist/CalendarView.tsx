@@ -3,7 +3,7 @@ import { Calendar, Clock, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const CalendarView = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState<"week" | "month">("week");
+  const [viewMode, setViewMode] = useState<"availability" | "month">("availability");
 
   // Mock data for availability and bookings
   const availabilitySlots = [
@@ -49,13 +49,13 @@ export const CalendarView = () => {
         <div className="flex items-center space-x-2">
           <button
             className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md px-3 ${
-              viewMode === "week" 
+              viewMode === "availability" 
                 ? "bg-blue-600 text-white hover:bg-blue-700" 
                 : "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900"
             }`}
-            onClick={() => setViewMode("week")}
+            onClick={() => setViewMode("availability")}
           >
-            Week
+            Availability
           </button>
           <button
             className={`inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 rounded-md px-3 ${
@@ -92,8 +92,8 @@ export const CalendarView = () => {
               </div>
             </div>
             <div className="p-6 pt-0">
-              {/* Weekly View */}
-              {viewMode === "week" && (
+              {/* Availability View */}
+              {viewMode === "availability" && (
                 <div className="space-y-4">
                   {availabilitySlots.map((slot, index) => (
                     <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
@@ -134,13 +134,24 @@ export const CalendarView = () => {
                       {day}
                     </div>
                   ))}
-                  {Array.from({ length: 35 }, (_, i) => (
-                    <div key={i} className="aspect-square p-1">
-                      <div className="w-full h-full border border-gray-200 rounded flex items-center justify-center text-sm hover:bg-gray-50 cursor-pointer">
-                        {Math.floor(Math.random() * 28) + 1}
+                  {Array.from({ length: 35 }, (_, i) => {
+                    const day = i + 1;
+                    const isBooked = [5, 12, 18, 25].includes(day); // Mock booked dates
+                    return (
+                      <div key={i} className="aspect-square p-1">
+                        <div className={`w-full h-full border border-gray-200 rounded flex items-center justify-center text-sm cursor-pointer transition-colors ${
+                          isBooked 
+                            ? 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200' 
+                            : 'hover:bg-gray-50'
+                        }`}>
+                          {day <= 28 ? day : ''}
+                          {isBooked && day <= 28 && (
+                            <div className="absolute w-2 h-2 bg-red-500 rounded-full -mt-3 -mr-3"></div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
